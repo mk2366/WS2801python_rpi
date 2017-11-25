@@ -5,7 +5,7 @@ _BUS = 0
 _DEVICE = 0
 _MAX_SPEED_HZ = 1000000
 _LEDS = 128
-__rgb_leds =  [0]*_LEDS*3
+__rgb_leds =  [0 for i in range(_LEDS*3)]
 
 # initialize SPI
 # this should meet the requirements of WS2801
@@ -22,7 +22,7 @@ def flush():
    return
 
 def clear():
-   __rgb_leds =  [0]*_LEDS*3
+   __rgb_leds[:] =  [0 for i in range(_LEDS*3)]
 
 def set_leds(pixels, rgb_values=[255,255,255]):
    """ set list pixels to list of list of rgb_values
