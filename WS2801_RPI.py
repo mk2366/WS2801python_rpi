@@ -10,15 +10,13 @@ __rgb_leds =  [0]*_LEDS*3
 # initialize SPI
 # this should meet the requirements of WS2801
 spi = spidev.SpiDev()
-spi.mode = 0
-spi.max_speed_hz = _MAX_SPEED_HZ
-spi.lsbfirst = True
-
-logging.info(str.format("WS2801_RPI.py: SPI successfully initialized with speed: {}", _MAX_SPEED_HZ))
-
 
 def flush():
    spi.open(_BUS, _DEVICE)
+   spi.mode = 0
+   spi.max_speed_hz = _MAX_SPEED_HZ
+   spi.lsbfirst = True
+   logging.info(str.format("WS2801_RPI.py: SPI successfully initialized with speed: {}", _MAX_SPEED_HZ))
    spi.write_bytes(__rgb_leds)
    spi.close()
    return
