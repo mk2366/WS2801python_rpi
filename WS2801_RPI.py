@@ -17,7 +17,7 @@ def flush():
    spi.max_speed_hz = _MAX_SPEED_HZ
    spi.lsbfirst = True
 #   logging.info(str.format("WS2801_RPI.py: SPI successfully initialized with speed: {}", _MAX_SPEED_HZ))
-   spi.write_bytes(__rgb_leds)
+   spi.writebytes(__rgb_leds)
    spi.close()
    return
 
