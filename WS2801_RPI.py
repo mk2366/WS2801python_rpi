@@ -13,8 +13,8 @@ try:
    spi = spidev.SpiDev()
    spi.open(_BUS, _DEVICE)
 except:
-    Raise RuntimeError("Problems when opening SPI device. Sorry for being fluffy")
-spi.mode = 0
+    raise RuntimeError("Problems when opening SPI device. Sorry for being fluffy")
+spi.mode = 0b00
 spi.max_speed_hz =_MAX_SPEED_HZ
 spi.lsbfirst = True
 #   logging.info(str.format("WS2801_RPI.py: SPI successfully initialized with speed: {}", _MAX_SPEED_HZ))
@@ -71,7 +71,7 @@ def set_leds(pixels, rgb_values=[255,255,255]):
 
    # some final sanity checks
    if len(__rgb_leds) != _LEDS*3:
-       raise RuntimeError("Something weired happend: Buffer overflow");
+       raise RuntimeError("Something weired happend: Buffer overflow")
    if len(pixels) > len(rgb_values):
        logging.warn("WS2801_RPI.py set_leds: more leds addressed than rgb values given: assume last rgb for remaining leds")
    if len(pixels) < len(rgb_values):
