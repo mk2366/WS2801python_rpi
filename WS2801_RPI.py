@@ -9,16 +9,18 @@ __rgb_leds =  [0 for i in range(_LEDS*3)]
 
 # initialize SPI
 # this should meet the requirements of WS2801
-spi = spidev.SpiDev()
+try:
+   spi = spidev.SpiDev()
+   spi.open(_BUS, _DEVICE)
+except:
+    Raise RuntimeError("Problems when opening SPI device. Sorry for being fluffy")
+spi.mode = 0
+spi.max_speed_hz =_MAX_SPEED_HZ
+spi.lsbfirst = True
+#   logging.info(str.format("WS2801_RPI.py: SPI successfully initialized with speed: {}", _MAX_SPEED_HZ))
 
 def flush():
-   spi.open(_BUS, _DEVICE)
-   spi.mode = 0
-   spi.max_speed_hz =_MAX_SPEED_HZ
-   spi.lsbfirst = True
-#   logging.info(str.format("WS2801_RPI.py: SPI successfully initialized with speed: {}", _MAX_SPEED_HZ))
-   spi.writebytes(__rgb_leds)
-   spi.close()
+   spi.writebytes(bytearray(__rgb_leds))
    return
 
 def clear():
@@ -30,7 +32,7 @@ def set_leds(pixels, rgb_values=[255,255,255]):
    if length(rgb_values) < list(pixels) the last entry of rgb_values will count for the rest of the pixels
    if pixel is a number only one pixel will be set"""
 
-# check input validity
+   # check input validity
    if not type(pixels) is int:
        if not type(pixels) is list:
            raise TypeError("WS2801_RPI.set_pixels attribute pixels must be an int addressing one of the available LEDs or a list of ints")
@@ -55,7 +57,7 @@ def set_leds(pixels, rgb_values=[255,255,255]):
            if (not type(i) is int) or i < 0 or i > 255:
                raise TypeError("WS2801_RPI.set_pixels attribute rgb_values must be an list containing 3 ints for rgb or a list of lists with rgb values")
 
-# write into __rgb_leds
+   # write into __rgb_leds
    if type(pixels) is int:
       pixels = [pixels]
    if type(rgb_values[0]) is int:
@@ -67,9 +69,9 @@ def set_leds(pixels, rgb_values=[255,255,255]):
            rgb = rgb_values[i]
        __rgb_leds[(val-1)*3:(val)*3] = rgb
 
-# some final sanity checks
+   # some final sanity checks
    if len(__rgb_leds) != _LEDS*3:
-       raise RuntimeException("Something weired happend: Buffer overflow");
+       raise RuntimeError("Something weired happend: Buffer overflow");
    if len(pixels) > len(rgb_values):
        logging.warn("WS2801_RPI.py set_leds: more leds addressed than rgb values given: assume last rgb for remaining leds")
    if len(pixels) < len(rgb_values):
