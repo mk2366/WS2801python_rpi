@@ -3,7 +3,7 @@ import logging
 
 _BUS = 0
 _DEVICE = 0
-_MAX_SPEED_HZ = 1000000
+_MAX_SPEED_HZ = 488000
 _LEDS = 128
 __rgb_leds = [0 for i in range(_LEDS*3)]
 
@@ -11,12 +11,17 @@ __rgb_leds = [0 for i in range(_LEDS*3)]
 # this should meet the requirements of WS2801
 try:
     spi = spidev.SpiDev()
+
+#    spi.no_cs = True
+#    spi.threewire = True
+#    spi.lsbfirst = True
+    spi.open(bus=_BUS, device=_DEVICE)
     spi.mode = 0b00
     spi.max_speed_hz = _MAX_SPEED_HZ
-    spi.lsbfirst = True
-    spi.open(_BUS, _DEVICE)
 except:
-    raise RuntimeError("Problems when opening SPI device. Sorry for being fluffy")
+    import traceback
+    traceback.print_exc()
+    raise
 #   logging.info(str.format("WS2801_RPI.py: SPI successfully initialized with speed: {}", _MAX_SPEED_HZ))
 
 
