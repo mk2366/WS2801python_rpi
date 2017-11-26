@@ -3,7 +3,7 @@ import logging
 
 _BUS = 0
 _DEVICE = 0
-_MAX_SPEED_HZ = 1000000
+_MAX_SPEED_HZ = 488000
 _LEDS = 128
 __rgb_leds = [0 for i in range(_LEDS*3)]
 
