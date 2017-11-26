@@ -27,7 +27,12 @@ except:
 
 def flush():
     """Send the bits to the leds. No parameters."""
-    spi.writebytes(bytearray(__rgb_leds))
+    try:
+        spi.writebytes(bytearray(__rgb_leds))
+    except:
+        import traceback
+        traceback.print_exc()
+        raise
     return
 
 
