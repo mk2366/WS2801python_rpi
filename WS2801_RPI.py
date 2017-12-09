@@ -60,7 +60,8 @@ def clear():
 
 
 def set_leds(pixels, rgb_values=[255, 255, 255]):
-    """Set list pixels to list of list of rgb_values.
+    """Set a list of pixels to list of corresponding rgb_values (given as
+    list of 3 values for red, green and blue).
 
     set_pixels([1,3,5],[[155,0,0],[0,0,0],[0,27,58]]) will set pixels
     1,3 and 5 to rgb values given.
