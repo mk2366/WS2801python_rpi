@@ -1,3 +1,8 @@
+"""
+Connect WS2801 on a Raspberry Pi (3) using the brilliant spidev lib.
+
+spidev can be found here: https://github.com/doceme/py-spidev.
+"""
 import spidev
 import logging
 
@@ -7,13 +12,12 @@ _MAX_SPEED_HZ = 488000
 _LEDS = 128
 __rgb_leds = [0 for i in range(_LEDS*3)]
 
+
 # initialize SPI
 # this should meet the requirements of WS2801
 try:
     spi = spidev.SpiDev()
 #    spi.no_cs = True
-#    spi.threewire = True
-#    spi.lsbfirst = True
     spi.open(bus=_BUS, device=_DEVICE)
     spi.mode = 0b00
     spi.max_speed_hz = _MAX_SPEED_HZ
@@ -35,7 +39,7 @@ def flush():
 
 
 def clear():
-    """Switch all leds off. Needs a flush() to be active."""
+    "Switch all leds off. Needs a flush() to be active."
     __rgb_leds[:] = [0 for i in range(_LEDS*3)]
 
 
@@ -102,3 +106,75 @@ values given: assume last rgb for remaining leds")
     if len(pixels) < len(rgb_values):
         logging.warn("WS2801_RPI.py set_leds: too many rgb values supplied: \
 skipping")
+
+
+# from here onwards: only invoke these if you have trouble or you want to
+# connect to a different LED strip and/or you are working on a PI different
+# from model 3
+def set_mode(mode):
+    """
+    Use only in case of problems with your device.
+
+    Check docu of spidev:
+    "mode - SPI mode as two bit pattern of clock polarity and phase [CPOL|CPHA], min: 0b00 = 0, max: 0b11 = 3"
+    """
+    try:
+        spi.mode = mode
+    except:
+        import traceback
+        traceback.print_exc()
+        raise
+
+
+def chip_select(bool):
+    """
+    Use only in case of panic!
+
+    Consult devspi docu https://github.com/doceme/py-spidev.
+    """
+    try:
+        spi.threewire = bool
+    except:
+        import traceback
+        traceback.print_exc()
+        raise
+    try:
+        spi.no_cs = not bool
+    except:
+        import traceback
+        traceback.print_exc()
+        raise
+
+
+def threewire(bool):
+    """
+    Use only in case of panic!
+
+    Consult devspi docu https://github.com/doceme/py-spidev.
+    """
+    try:
+        spi.threewire = bool
+    except:
+        import traceback
+        traceback.print_exc()
+        raise
+
+
+def lbsfirst(bool):
+    """
+    Use only in case of panic!
+
+    Consult devspi docu https://github.com/doceme/py-spidev.
+    """
+    try:
+        spi.threewire = bool
+    except:
+        import traceback
+        traceback.print_exc()
+        raise
+    try:
+        spi.lsbfirst = bool
+    except:
+        import traceback
+        traceback.print_exc()
+        raise
