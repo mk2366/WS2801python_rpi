@@ -17,7 +17,6 @@ __rgb_leds = [0 for i in range(_LEDS*3)]
 # this should meet the requirements of WS2801
 try:
     spi = spidev.SpiDev()
-#    spi.no_cs = True
     spi.open(bus=_BUS, device=_DEVICE)
     spi.mode = 0b00
     spi.max_speed_hz = _MAX_SPEED_HZ
@@ -25,6 +24,21 @@ except:
     import traceback
     traceback.print_exc()
     raise
+
+
+def max_speed_hz(hz):
+    """
+    Set the communication speed for SPI.
+
+    Default: 976000HZ. There is no need to call this function if default is ok.
+    Consult devspi docu https://github.com/doceme/py-spidev.
+    """
+    try:
+        spi.max_speed_hz = hz
+    except:
+        import traceback
+        traceback.print_exc()
+        raise
 
 
 def flush():
@@ -128,16 +142,10 @@ def set_mode(mode):
 
 def chip_select(bool):
     """
-    Use only in case of panic!
+    Use only in case of panic.
 
     Consult devspi docu https://github.com/doceme/py-spidev.
     """
-    try:
-        spi.threewire = bool
-    except:
-        import traceback
-        traceback.print_exc()
-        raise
     try:
         spi.no_cs = not bool
     except:
@@ -148,7 +156,7 @@ def chip_select(bool):
 
 def threewire(bool):
     """
-    Use only in case of panic!
+    Use only in case of panic.
 
     Consult devspi docu https://github.com/doceme/py-spidev.
     """
@@ -162,7 +170,7 @@ def threewire(bool):
 
 def lbsfirst(bool):
     """
-    Use only in case of panic!
+    Use only in case of panic.
 
     Consult devspi docu https://github.com/doceme/py-spidev.
     """
