@@ -55,6 +55,7 @@ def flush():
 
 def clear():
     "Switch all leds off. Needs a flush() to be active."
+    global __rgb_leds
     __rgb_leds[:] = [0 for i in range(_LEDS*3)]
 
 
@@ -77,6 +78,9 @@ int addressing one of the available LEDs or a list of ints")
             if (not type(val) is int) or val < 1 or val > _LEDS:
                 raise TypeError("WS2801_RPI.set_pixels attribute pixels must \
 be an int addressing one of the available LEDs or a list of ints")
+    else:
+        if pixels > _LEDS or pixels < 1:
+            raise TypeError("You are addressing an LED that does not exist")
     if not type(rgb_values) is list:
         raise TypeError("WS2801_RPI.set_pixels attribute rgb_values must be an \
 list containing 3 ints between 0 and 255 or a list of lists with rgb values")
@@ -151,20 +155,6 @@ def set_mode(mode):
     """
     try:
         spi.mode = mode
-    except:
-        import traceback
-        traceback.print_exc()
-        raise
-
-
-def set_chip_select(bool):
-    """
-    Use only in case of panic.
-
-    Consult devspi docu https://github.com/doceme/py-spidev.
-    """
-    try:
-        spi.no_cs = not bool
     except:
         import traceback
         traceback.print_exc()
