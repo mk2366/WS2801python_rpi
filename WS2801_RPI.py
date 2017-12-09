@@ -10,7 +10,7 @@ _BUS = 0
 _DEVICE = 0
 _MAX_SPEED_HZ = 976000
 _LEDS = 128
-__rgb_leds = [0 for i in range(_LEDS*3)]
+__rgb_leds = []
 
 
 # initialize SPI
@@ -26,19 +26,20 @@ except:
     raise
 
 
-def max_speed_hz(hz):
+def set_number_of_leds(leds=128):
     """
-    Set the communication speed for SPI.
+    Define the number of leds on your strip.
 
-    Default: 976000HZ. There is no need to call this function if default is ok.
-    Consult devspi docu https://github.com/doceme/py-spidev.
+    This function has to be called if different number than 128!
     """
-    try:
-        spi.max_speed_hz = hz
-    except:
-        import traceback
-        traceback.print_exc()
-        raise
+    global _LEDS
+    _LEDS = leds
+    global __rgb_leds
+    __rgb_leds = [0 for i in range(_LEDS*3)]
+
+
+# initialize the module with 128 leds
+set_number_of_leds()
 
 
 def flush():
@@ -67,6 +68,7 @@ def set_leds(pixels, rgb_values=[255, 255, 255]):
     if pixel is a number only one pixel will be set.
     """
     # check input validity
+    global __rgb_leds
     if not type(pixels) is int:
         if not type(pixels) is list:
             raise TypeError("WS2801_RPI.set_pixels attribute pixels must be an \
@@ -122,6 +124,21 @@ values given: assume last rgb for remaining leds")
 skipping")
 
 
+def set_max_speed_hz(hz):
+    """
+    Set the communication speed for SPI.
+
+    Default: 976000HZ. There is no need to call this function if default is ok.
+    Consult devspi docu https://github.com/doceme/py-spidev.
+    """
+    try:
+        spi.max_speed_hz = hz
+    except:
+        import traceback
+        traceback.print_exc()
+        raise
+
+
 # from here onwards: only invoke these if you have trouble or you want to
 # connect to a different LED strip and/or you are working on a PI different
 # from model 3
@@ -140,7 +157,7 @@ def set_mode(mode):
         raise
 
 
-def chip_select(bool):
+def set_chip_select(bool):
     """
     Use only in case of panic.
 
@@ -154,7 +171,7 @@ def chip_select(bool):
         raise
 
 
-def threewire(bool):
+def set_threewire(bool):
     """
     Use only in case of panic.
 
@@ -168,7 +185,7 @@ def threewire(bool):
         raise
 
 
-def lbsfirst(bool):
+def set_lbsfirst(bool):
     """
     Use only in case of panic.
 
