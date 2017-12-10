@@ -5,14 +5,15 @@ spidev can be found here: https://github.com/doceme/py-spidev.
 """
 import spidev
 import logging
-import time
+from timeit import default_timer as timer
 
 _BUS = 0
 _DEVICE = 0
 _MAX_SPEED_HZ = 976000
 _LEDS = 0
 __rgb_leds = []
-_mode = 0b00
+_mode = 0b01
+_last_flush = 0
 
 # texts to separate into resources once I do a package (if ever)
 __string_type_error_1 = "Attribute pixels must be an \
@@ -27,6 +28,7 @@ __string_runtime_error_2 = "Something weird happend: Buffer overflow"
 __string_runtime_error_3 = "SPI Bus must be driven with clock speed > 1500HZ \
 for WS2801"
 __string_runtime_error_4 = "Mode must be between 0 and 3."
+__string_runtime_error_5 = "flush() too often"
 __string_warning_1 = "more leds addressed than rgb \
 values given: assume last rgb for remaining leds"
 __string_warning_2 = "too many rgb values supplied: \
@@ -75,15 +77,20 @@ set_number_of_leds()
 
 def flush():
     """Send the bits to the leds. No parameters."""
+    # WS2801 needs 500 micro seconds between flushes
+    global _last_flush
+    now = timer()
+    if (now - _last_flush) <= 0.0005:
+        raise RuntimeError(__string_runtime_error_5)
+    _last_flush = now
     try:
-        spi.writebytes(__rgb_leds)
+        # WS2801 needs 24 bits clock high to get started
+        spi.writebytes(__rgb_leds+[255, 255, 255])
     except:
         import traceback
         traceback.print_exc()
         raise
     return
-    # WS2801 needs 500 microseconds clock low before next data transfer
-    time.sleep(.0005)
 
 
 def clear():
