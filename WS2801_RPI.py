@@ -28,7 +28,6 @@ __string_runtime_error_2 = "Something weird happend: Buffer overflow"
 __string_runtime_error_3 = "SPI Bus must be driven with clock speed > 1500HZ \
 for WS2801"
 __string_runtime_error_4 = "Mode must be between 0 and 3."
-__string_runtime_error_5 = "flush() too often"
 __string_warning_1 = "more leds addressed than rgb \
 values given: assume last rgb for remaining leds"
 __string_warning_2 = "too many rgb values supplied: \
@@ -79,10 +78,9 @@ def flush():
     """Send the bits to the leds. No parameters."""
     # WS2801 needs 500 micro seconds between flushes
     global _last_flush
-    now = timer()
-    if (now - _last_flush) <= 0.0005:
-        raise RuntimeError(__string_runtime_error_5)
-    _last_flush = now
+    while (timer() - _last_flush) <= 0.0005:
+        pass
+    _last_flush = timer()
     try:
         # WS2801 needs 24 bits clock high to get started
         spi.writebytes(__rgb_leds+[255, 255, 255])
