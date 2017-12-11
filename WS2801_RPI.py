@@ -1,11 +1,28 @@
 """
-Connect WS2801 on a Raspberry Pi (3) using the brilliant spidev lib.
+WS2801python_rpi: A python program to connect WS2801 driven LED strips.
 
-spidev can be found here: https://github.com/doceme/py-spidev.
+Copyright (C) 2017  Markus Kupke <kupkemarkus@gmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+See <http://www.gnu.org/licenses/>.
 """
 import spidev
 import logging
 from timeit import default_timer as timer
+
+
+print("""WS2801python_rpi  Copyright (C) 2017  Markus Kupke
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it.""")
 
 _BUS = 0
 _DEVICE = 0
@@ -80,7 +97,6 @@ def flush():
     global _last_flush
     while (timer() - _last_flush) <= 0.0005:
         pass
-    _last_flush = timer()
     try:
         # WS2801 needs 24 bits clock high to get started
         spi.writebytes(__rgb_leds+[255, 255, 255])
@@ -88,7 +104,7 @@ def flush():
         import traceback
         traceback.print_exc()
         raise
-    return
+    _last_flush = timer()
 
 
 def clear():
