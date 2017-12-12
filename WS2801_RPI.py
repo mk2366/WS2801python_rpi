@@ -15,22 +15,22 @@ GNU General Public License for more details.
 
 See <http://www.gnu.org/licenses/>.
 """
-import spidev
-import logging
-from timeit import default_timer as timer
+import spidev as __spidev
+import logging as __logging
+from timeit import default_timer as __timer
 
 
-print("""WS2801python_rpi  Copyright (C) 2017  Markus Kupke
+__logging.warn("""WS2801python_rpi  Copyright (C) 2017  Markus Kupke
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it.""")
 
-_BUS = 0
-_DEVICE = 0
-_MAX_SPEED_HZ = 976000
-_LEDS = 0
+__BUS = 0
+__DEVICE = 0
+__MAX_SPEED_HZ = 976000
+__NUMBER_LEDS = 0
 __rgb_leds = []
-_mode = 0b01
-_last_flush = 0
+__mode = 0b01
+__last_flush = 0
 
 # texts to separate into resources once I do a package (if ever)
 __string_type_error_1 = "Attribute pixels must be an \
@@ -40,6 +40,7 @@ list containing 3 ints between 0 and 255 or a list of lists with rgb values"
 __string_type_error_3 = "Attribute must be a dictionary"
 __string_type_error_4 = "Value must be a dictionary as well"
 __string_type_error_5 = "rgb values need to be ints and between 0 and 255"
+__string_type_error_6 = "bus and device must be either 0 or 1 each"
 __string_runtime_error_1 = "You are addressing an LED that does not exist"
 __string_runtime_error_2 = "Something weird happend: Buffer overflow"
 __string_runtime_error_3 = "SPI Bus must be driven with clock speed > 1500HZ \
@@ -53,10 +54,10 @@ skipping"
 # initialize SPI
 # this should meet the requirements of WS2801
 try:
-    spi = spidev.SpiDev()
-    spi.open(bus=_BUS, device=_DEVICE)
-    spi.mode = _mode
-    spi.max_speed_hz = _MAX_SPEED_HZ
+    __spi = __spidev.SpiDev()
+    __spi.open(bus=__BUS, device=__DEVICE)
+    __spi.mode = __mode
+    __spi.max_speed_hz = __MAX_SPEED_HZ
 except:
     import traceback
     traceback.print_exc()
@@ -64,11 +65,23 @@ except:
 
 
 def set_spidev_bus_device(bus=0, device=0):
+    """
+    RASPBERRY PI Model 3 is normally connected via /dev/spidev0.0.
+
+    If your model connects differently: adaptwith this function.
+    """
+    if (not type(bus) is int or
+            not type(device) is int or
+            bus < 0 or
+            bus > 1 or
+            device < 0 or
+            device > 1):
+        raise TypeError(__string_type_error_6)
     try:
-        spi.close()
-        spi.open(bus, device)
-        spi.mode = _mode
-        spi.max_speed_hz = _MAX_SPEED_HZ
+        __spi.close()
+        __spi.open(bus, device)
+        __spi.mode = __mode
+        __spi.max_speed_hz = __MAX_SPEED_HZ
     except:
         import traceback
         traceback.print_exc()
@@ -81,10 +94,10 @@ def set_number_of_leds(leds=128):
 
     This function has to be called if different number than 128!
     """
-    global _LEDS
-    _LEDS = leds
+    global __NUMBER_LEDS
+    __NUMBER_LEDS = leds
     global __rgb_leds
-    __rgb_leds = [0 for i in range(_LEDS*3)]
+    __rgb_leds = [0 for i in range(__NUMBER_LEDS*3)]
 
 
 # initialize the module with 128 leds
@@ -95,22 +108,22 @@ def flush():
     """Send the bits to the leds. No parameters."""
     # WS2801 needs 500 micro seconds between flushes
     global _last_flush
-    while (timer() - _last_flush) <= 0.0005:
+    while (__timer() - _last_flush) <= 0.0005:
         pass
     try:
         # WS2801 needs 24 bits clock high to get started
-        spi.writebytes(__rgb_leds+[255, 255, 255])
+        __spi.writebytes(__rgb_leds+[255, 255, 255])
     except:
         import traceback
         traceback.print_exc()
         raise
-    _last_flush = timer()
+    _last_flush = __timer()
 
 
 def clear():
     """Switch all leds off. Needs a flush() to be active."""
     global __rgb_leds
-    __rgb_leds[:] = [0 for i in range(_LEDS*3)]
+    __rgb_leds[:] = [0 for i in range(__NUMBER_LEDS*3)]
 
 
 def get_led_colors_buffer_dict():
@@ -120,10 +133,10 @@ def get_led_colors_buffer_dict():
     The leds are indexed with ints starting with 1 and values are dicts with
     rgb indexed with "red","green" and "blue"
     """
-    global _LEDS
+    global __NUMBER_LEDS
     leds_dict = {}
     rgb_dict = {"red": 0, "green": 0, "blue": 0}
-    for index in range(0, _LEDS * 3, 3):
+    for index in range(0, __NUMBER_LEDS * 3, 3):
         rgb_dict = {"red": __rgb_leds[index],
                     "green": __rgb_leds[index+1],
                     "blue": __rgb_leds[index+2]}
@@ -146,7 +159,7 @@ def set_led_colors_buffer_dict_multi_call(leds_dict):
     for led, rgb_dict in leds_dict.iteritems():
         rgb_list = [0, 0, 0]
         if type(led) is int:
-            if led < 1 or led > _LEDS:
+            if led < 1 or led > __NUMBER_LEDS:
                 raise TypeError(__string_runtime_error_1)
             if not type(rgb_dict) is dict:
                 raise TypeError(__string_type_error_4)
@@ -188,10 +201,10 @@ def set_led_colors_buffer_list_multi_call(pixels, rgb_values=[255, 255, 255]):
         if not type(pixels) is list:
             raise TypeError(__string_type_error_1)
         for val in pixels:
-            if (not type(val) is int) or val < 1 or val > _LEDS:
+            if (not type(val) is int) or val < 1 or val > __NUMBER_LEDS:
                 raise TypeError(__string_type_error_1)
     else:
-        if pixels > _LEDS or pixels < 1:
+        if pixels > __NUMBER_LEDS or pixels < 1:
             raise RuntimeError(__string_runtime_error_1)
     if not type(rgb_values) is list:
         raise TypeError(__string_type_error_2)
@@ -224,12 +237,12 @@ def set_led_colors_buffer_list_multi_call(pixels, rgb_values=[255, 255, 255]):
         __rgb_leds[(val-1)*3:(val)*3] = rgb
 
     # some final sanity checks
-    if len(__rgb_leds) != _LEDS*3:
+    if len(__rgb_leds) != __NUMBER_LEDS*3:
         raise RuntimeError(__string_runtime_error_2)
     if len(pixels) > len(rgb_values):
-        logging.warn(__string_warning_1)
+        __logging.warn(__string_warning_1)
     if len(pixels) < len(rgb_values):
-        logging.warn(__string_warning_2)
+        __logging.warn(__string_warning_2)
 
 
 def set_max_speed_hz(hz):
@@ -245,43 +258,9 @@ def set_max_speed_hz(hz):
         # reset all the time :-)
         raise RuntimeError(__string_runtime_error_3)
     try:
-        spi.max_speed_hz = hz
-    except:
-        import traceback
-        traceback.print_exc()
-        raise
-
-
-# from here onwards: only invoke these if you have trouble or you want to
-# connect to a different LED strip and/or you are working on a PI different
-# from model 3
-def set_mode(mode):
-    """
-    Use only in case of problems with your device.
-
-    Check docu of spidev:
-    "mode - SPI mode as two bit pattern of clock polarity and phase [CPOL|CPHA], min: 0b00 = 0, max: 0b11 = 3"
-    """
-    if mode < 0 or mode > 3:
-        raise RuntimeError(__string_runtime_error_4)
-    try:
-        spi.mode = mode
-    except:
-        import traceback
-        traceback.print_exc()
-        raise
-    global _mode
-    _mode = mode
-
-
-def set_threewire(bool):
-    """
-    Use only in case of panic.
-
-    Consult devspi docu https://github.com/doceme/py-spidev.
-    """
-    try:
-        spi.threewire = bool
+        __spi.max_speed_hz = hz
+        global __MAX_SPEED_HZ
+        __MAX_SPEED_HZ = hz
     except:
         import traceback
         traceback.print_exc()
