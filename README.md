@@ -25,6 +25,13 @@ as you need to create effects.
 * `set_led_colors_buffer_dict_multi_call()`: After you adjusted the dict of the function above: Write it back to the buffer. Don't forget `flush()`.
 * `set_max_speed_hz(hz)`: Default is 1MHz. You may change this but not below 1,5KHz.
 
+## Hint
+You can raise the log level if you like to suppress warnings, like
+```python
+import logging
+logging.getLogger().setLevel(31)
+```
+
 ## General remarks on WS2801:
 * In the Data [Sheet](https://cdn-shop.adafruit.com/datasheets/WS2801.pdf) of WS2801 I found the following passage I didn't fully understand: `When the WS2801 receives total 24
 clock rising edges, the WS2801 enters relay mode ...`. Nevertheless I send now 24 times 1 [255,255,255] before sending the RGB data for the LEDs and have much
