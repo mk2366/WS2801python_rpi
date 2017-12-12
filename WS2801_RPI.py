@@ -107,8 +107,8 @@ set_number_of_leds()
 def flush():
     """Send the bits to the leds. No parameters."""
     # WS2801 needs 500 micro seconds between flushes
-    global _last_flush
-    while (__timer() - _last_flush) <= 0.0005:
+    global __last_flush
+    while (__timer() - __last_flush) <= 0.0005:
         pass
     try:
         # WS2801 needs 24 bits clock high to get started
@@ -117,7 +117,7 @@ def flush():
         import traceback
         traceback.print_exc()
         raise
-    _last_flush = __timer()
+    __last_flush = __timer()
 
 
 def clear():
