@@ -2,6 +2,7 @@
 WS2801python_rpi: A python program to connect WS2801 driven LED strips.
 
 Copyright (C) 2017  Markus Kupke <kupkemarkus@gmail.com>
+Version: '1.0.0.dev2'
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

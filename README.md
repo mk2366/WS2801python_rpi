@@ -1,7 +1,7 @@
 # WS2801python_rpi
 ## A python module connecting RPI with WS2801
 
-__This is version 1.0.0.dev1. It is in development. Code may change without notice.__
+__This is version 1.0.0.dev2. It is in development. Code may change without notice.__
 
 It is based on the spidev module you can find [here](https://github.com/doceme/py-spidev).
 
@@ -24,6 +24,10 @@ as you need to create effects.
 * `get_led_colors_buffer_dict()`: Get all rgb values currently in the buffer as dictionary. This might differ from what you see on your LED strip.
 * `set_led_colors_buffer_dict_multi_call()`: After you adjusted the dict of the function above: Write it back to the buffer. Don't forget `flush()`.
 * `set_max_speed_hz(hz)`: Default is 1MHz. You may change this but not below 1,5KHz.
+
+## Installation
+I have not managed to upload to pypi so far. Therefore only way to install is: use `python setup.py install` in the download directory. Or simply put `WS2801_RPI`
+into the folder where you like to do your python programming.
 
 ## Hint
 You can raise the log level if you like to suppress warnings, like
