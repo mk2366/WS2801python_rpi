@@ -10,9 +10,9 @@ You can use it like this:
 ```python
 import WS2801_RPI as w
 s=w.set_led_colors_buffer_list_multi_call
-w.set_number_of_leds(100)                      #adjust to the number of leds in your project
-w.s(1)                                         #to let led number 1 shine in white
-w.flush()                                      #to communicate your settings to the led strip via spi
+w.set_number_of_leds(100)                      # adjust to the number of leds in your project
+w.s(1)                                         # to let led number 1 shine in white
+w.flush()                                      # to communicate your settings to the led strip via spi
 ```
 
 You can call set_leds as often as you like before flushing it out. And of course you can flush as often
