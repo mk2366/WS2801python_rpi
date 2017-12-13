@@ -43,4 +43,4 @@ better results.
 * WS2801 is using the raising flag of the clock to retrieve the data and expects clock being low for 500 microseconds between data transmissions. Hence there is no need to chance
 the mode of spidev. It must be zero, regardless which effects you see.
 
-## Would be glad if this code would be used often in your projects. Feedback and pull requests are more than welcome.
+## Would be glad if this code was used often in your projects. Feedback and pull requests are more than welcome.
