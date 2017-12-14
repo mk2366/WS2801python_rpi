@@ -1,7 +1,7 @@
 # WS2801python_rpi
 ## A python module connecting RPI with WS2801
 
-__This is version 1.0.0.dev2. It is in development. Code may change without notice.__
+__This is version 1.0.0.dev3. It is in development. Code may change without notice.__
 
 It is based on the spidev module you can find [here](https://github.com/doceme/py-spidev).
 
@@ -26,11 +26,10 @@ as you need to create effects.
 * `set_max_speed_hz(hz)`: Default is 1MHz. You may change this but not below 1,5KHz.
 
 ## Installation
-I have not managed to upload to pypi so far. Therefore only way to install is: use `python setup.py install` in the download directory. Or simply put `WS2801_RPI`
-into the folder where you like to do your python programming.
+`pip install WS2801_RPI`.
 
 ## Hint
-You can raise the log level if you like to suppress warnings, like
+You can raise the log level if you like to suppress warnings:
 ```python
 import logging
 logging.getLogger().setLevel(31)
@@ -38,8 +37,7 @@ logging.getLogger().setLevel(31)
 
 ## General remarks on WS2801:
 * In the Data [Sheet](https://cdn-shop.adafruit.com/datasheets/WS2801.pdf) of WS2801 I found the following passage I didn't fully understand: `When the WS2801 receives total 24
-clock rising edges, the WS2801 enters relay mode ...`. Nevertheless I send now 24 times 1 [255,255,255] before sending the RGB data for the LEDs and have much
-better results.
+clock rising edges, the WS2801 enters relay mode ...`. In addition one can read [this](https://electronics.stackexchange.com/a/307117) explanation. I found it helpful.
 * WS2801 is using the raising flag of the clock to retrieve the data and expects clock being low for 500 microseconds between data transmissions. Hence there is no need to chance
 the mode of spidev. It must be zero, regardless which effects you see.
 

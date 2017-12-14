@@ -2,7 +2,7 @@
 WS2801python_rpi: A python program to connect WS2801 driven LED strips.
 
 Copyright (C) 2017  Markus Kupke <kupkemarkus@gmail.com>
-Version: '1.0.0.dev2'
+Version: '1.0.0.dev3'
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@ See <http://www.gnu.org/licenses/>.
 """
 import spidev as __spidev
 import logging as __logging
+import time
 from timeit import default_timer as __timer
 
 
@@ -32,6 +33,8 @@ __NUMBER_LEDS = 0
 __rgb_leds = []
 __mode = 0b01
 __last_flush = 0
+# only for initialization. Is set to reasonable values at end of file
+__gamma = [255]*256
 
 # texts to separate into resources once I do a package (if ever)
 __string_type_error_1 = "Attribute pixels must be an \
@@ -98,11 +101,14 @@ def set_number_of_leds(leds=128):
     global __NUMBER_LEDS
     __NUMBER_LEDS = leds
     global __rgb_leds
-    __rgb_leds = [0 for i in range(__NUMBER_LEDS*3)]
-
-
-# initialize the module with 128 leds
-set_number_of_leds()
+    # had issues with first time use of strip. Therefore some dry run upfront
+    for j in range(3):
+        __rgb_leds = [255 for i in range(__NUMBER_LEDS*3)]
+        flush()
+        time.sleep(1)
+        __rgb_leds = [0 for i in range(__NUMBER_LEDS*3)]
+        flush()
+        time.sleep(1)
 
 
 def flush():
@@ -112,8 +118,7 @@ def flush():
     while (__timer() - __last_flush) <= 0.0005:
         pass
     try:
-        # WS2801 needs 24 bits clock high to get started
-        __spi.writebytes(__rgb_leds+[255, 255, 255])
+        __spi.writebytes(map(lambda rgb: __gamma[rgb], __rgb_leds))
     except:
         import traceback
         traceback.print_exc()
@@ -266,3 +271,15 @@ def set_max_speed_hz(hz):
         import traceback
         traceback.print_exc()
         raise
+
+
+def set_gamma(gamma=2.1):
+    """Set the gamma correction."""
+    for i in range(256):
+        __gamma[i] = int(((i/255.0)**gamma) * 255)
+
+
+# initialize the module with 128 leds
+set_number_of_leds()
+# set gamma to a reasonable value
+set_gamma()
