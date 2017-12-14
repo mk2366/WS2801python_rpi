@@ -24,6 +24,8 @@ as you need to create effects.
 * `get_led_colors_buffer_dict()`: Get all rgb values currently in the buffer as dictionary. This might differ from what you see on your LED strip.
 * `set_led_colors_buffer_dict_multi_call()`: After you adjusted the dict of the function above: Write it back to the buffer. Don't forget `flush()`.
 * `set_max_speed_hz(hz)`: Default is 1MHz. You may change this but not below 1,5KHz.
+* `set_gamma()`: Set the gamma value. Formula is: `int(((rgb/255)**gamma)*255)`. Default is 2.1 which reduces the number of rgb values to approx. 187.
+Set it to `1` you will have 255 values per color but you won't be able to see them. Your eye will turn many into white.
 
 ## Installation
 `pip install WS2801_RPI`.
