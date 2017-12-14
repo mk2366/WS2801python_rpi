@@ -191,6 +191,12 @@ def set_led_colors_buffer_dict_multi_call(leds_dict):
             set_led_colors_buffer_list_multi_call(led, rgb_list)
 
 
+def get_led_colors_buffer_list():
+    """Get the list of rgb values for all LEDs."""
+    return [[__rgb_leds[i], __rgb_leds[i+1],
+             __rgb_leds[i+2]] for i in range(0, 3 * __NUMBER_LEDS, 3)]
+
+
 def set_led_colors_buffer_list_multi_call(pixels, rgb_values=[255, 255, 255]):
     """Set a list of pixels to list of corresponding rgb_values (given as
     list of 3 values for red, green and blue).
