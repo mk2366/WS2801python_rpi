@@ -1,7 +1,7 @@
 # WS2801python_rpi
 ## A python module connecting RPI with WS2801
 
-__This is version 1.0.0.dev3. It is in development. Code may change without notice.__
+__This is version 1.0.0.dev4. It is in development. Code may change without notice.__
 
 It is based on the spidev module you can find [here](https://github.com/doceme/py-spidev).
 
@@ -36,6 +36,11 @@ You can raise the log level if you like to suppress warnings:
 import logging
 logging.getLogger().setLevel(31)
 ```
+
+## Acknowledgement
+
+* [Atom](https://atom.io/) was my editor of choice
+* Formatting was done with [linter-pylama](https://atom.io/packages/linter-pylama)
 
 ## General remarks on WS2801:
 * In the Data [Sheet](https://cdn-shop.adafruit.com/datasheets/WS2801.pdf) of WS2801 I found the following passage I didn't fully understand: `When the WS2801 receives total 24

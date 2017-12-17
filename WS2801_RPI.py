@@ -72,7 +72,7 @@ def set_spidev_bus_device(bus=0, device=0):
     """
     RASPBERRY PI Model 3 is normally connected via /dev/spidev0.0.
 
-    If your model connects differently: adaptwith this function.
+    If your model connects differently: adapt with this function.
     """
     if (not type(bus) is int or
             not type(device) is int or
@@ -100,13 +100,13 @@ def set_number_of_leds(leds=128):
     """
     global __NUMBER_LEDS
     __NUMBER_LEDS = leds
-    global __rgb_leds
     # had issues with first time use of strip. Therefore some dry run upfront
     for j in range(3):
-        __rgb_leds = [255 for i in range(__NUMBER_LEDS*3)]
+        set_led_colors_buffer_list_multi_call(
+                [i+1 for i in range(__NUMBER_LEDS)])
         flush()
         time.sleep(1)
-        __rgb_leds = [0 for i in range(__NUMBER_LEDS*3)]
+        clear()
         flush()
         time.sleep(1)
 
@@ -286,6 +286,7 @@ def set_gamma(gamma=2.1):
 
 
 # initialize the module with 128 leds
+set_gamma()
 set_number_of_leds()
 # set gamma to a reasonable value
 set_gamma()
