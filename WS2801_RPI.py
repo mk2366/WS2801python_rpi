@@ -118,7 +118,7 @@ def flush():
     while (__timer() - __last_flush) <= 0.0005:
         pass
     try:
-        __spi.writebytes(map(lambda rgb: __gamma[rgb], __rgb_leds))
+        __spi.writebytes(list(map(lambda rgb: __gamma[rgb], __rgb_leds)))
     except:
         import traceback
         traceback.print_exc()
