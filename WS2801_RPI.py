@@ -103,7 +103,8 @@ def set_number_of_leds(leds=128):
     # had issues with first time use of strip. Therefore some dry run upfront
     for j in range(3):
         set_led_colors_buffer_list_multi_call(
-                [i+1 for i in range(__NUMBER_LEDS)])
+                [i+1 for i in range(__NUMBER_LEDS)],
+                [[255, 255, 255]] * __NUMBER_LEDS)
         flush()
         time.sleep(1)
         clear()
