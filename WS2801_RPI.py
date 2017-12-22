@@ -20,6 +20,7 @@ import spidev as __spidev
 import logging as __logging
 import time
 from timeit import default_timer as __timer
+import traceback
 
 
 __logging.warn("""WS2801python_rpi  Copyright (C) 2017  Markus Kupke
@@ -43,9 +44,9 @@ __string_type_error_2 = "Attribute rgb_values must be an \
 list containing 3 ints between 0 and 255 or a list of lists with rgb values"
 __string_type_error_3 = "Attribute must be a dictionary"
 __string_type_error_4 = "Value must be a dictionary as well"
-__string_type_error_5 = "rgb values need to be ints and between 0 and 255"
 __string_type_error_6 = "bus and device must be either 0 or 1 each"
-__string_runtime_error_1 = "You are addressing an LED that does not exist"
+__string_value_error_1 = "You are addressing an LED that does not exist"
+__string_value_error_2 = "rgb values must be between 0 and 255"
 __string_runtime_error_2 = "Something weird happend: Buffer overflow"
 __string_runtime_error_3 = "SPI Bus must be driven with clock speed > 1500HZ \
 for WS2801"
@@ -59,11 +60,7 @@ skipping"
 # this should meet the requirements of WS2801
 try:
     __spi = __spidev.SpiDev()
-    __spi.open(bus=__BUS, device=__DEVICE)
-    __spi.mode = __mode
-    __spi.max_speed_hz = __MAX_SPEED_HZ
 except:
-    import traceback
     traceback.print_exc()
     raise
 
@@ -81,15 +78,10 @@ def set_spidev_bus_device(bus=0, device=0):
             device < 0 or
             device > 1):
         raise TypeError(__string_type_error_6)
-    try:
-        __spi.close()
-        __spi.open(bus, device)
-        __spi.mode = __mode
-        __spi.max_speed_hz = __MAX_SPEED_HZ
-    except:
-        import traceback
-        traceback.print_exc()
-        raise
+    global __BUS
+    __BUS = bus
+    global __DEVICE
+    __DEVICE = device
 
 
 def set_number_of_leds(leds=128):
@@ -100,7 +92,16 @@ def set_number_of_leds(leds=128):
     """
     global __NUMBER_LEDS
     __NUMBER_LEDS = leds
-    # had issues with first time use of strip. Therefore some dry run upfront
+    global __rgb_leds
+    __rgb_leds = [0] * __NUMBER_LEDS * 3
+
+
+def get_number_of_leds():
+    return __NUMBER_LEDS
+
+
+def hello():
+    """Call one time to check LEDs."""
     for j in range(3):
         set_led_colors_buffer_list_multi_call(
                 [i+1 for i in range(__NUMBER_LEDS)],
@@ -119,9 +120,12 @@ def flush():
     while (__timer() - __last_flush) <= 0.0005:
         pass
     try:
+        __spi.open(bus=__BUS, device=__DEVICE)
+        __spi.mode = __mode
+        __spi.max_speed_hz = __MAX_SPEED_HZ
         __spi.writebytes(list(map(lambda rgb: __gamma[rgb], __rgb_leds)))
+        __spi.close()
     except:
-        import traceback
         traceback.print_exc()
         raise
     __last_flush = __timer()
@@ -147,7 +151,7 @@ def get_led_colors_buffer_dict():
         rgb_dict = {"red": __rgb_leds[index],
                     "green": __rgb_leds[index+1],
                     "blue": __rgb_leds[index+2]}
-        leds_dict[(index+3)/3] = rgb_dict
+        leds_dict[int((index+3)/3)] = rgb_dict
     return leds_dict
 
 
@@ -163,31 +167,31 @@ def set_led_colors_buffer_dict_multi_call(leds_dict):
     """
     if not type(leds_dict) is dict:
         raise TypeError(__string_type_error_3)
-    for led, rgb_dict in leds_dict.iteritems():
+    for led, rgb_dict in leds_dict.items():
         rgb_list = [0, 0, 0]
         if type(led) is int:
             if led < 1 or led > __NUMBER_LEDS:
-                raise TypeError(__string_runtime_error_1)
+                raise ValueError(__string_value_error_1)
             if not type(rgb_dict) is dict:
                 raise TypeError(__string_type_error_4)
-            for color, rgb_value in rgb_dict.iteritems():
+            for color, rgb_value in rgb_dict.items():
                 if color == "red":
                     if (not type(rgb_value) is int or
                             rgb_value < 0 or
                             rgb_value > 255):
-                        raise TypeError(__string_type_error_5)
+                        raise ValueError(__string_value_error_2)
                     rgb_list[0] = rgb_value
                 if color == "green":
                     if (not type(rgb_value) is int or
                             rgb_value < 0 or
                             rgb_value > 255):
-                        raise TypeError(__string_type_error_5)
+                        raise ValueError(__string_value_error_2)
                     rgb_list[1] = rgb_value
                 if color == "blue":
                     if (not type(rgb_value) is int or
                             rgb_value < 0 or
                             rgb_value > 255):
-                        raise TypeError(__string_type_error_5)
+                        raise ValueError(__string_value_error_2)
                     rgb_list[2] = rgb_value
             set_led_colors_buffer_list_multi_call(led, rgb_list)
 
@@ -214,11 +218,15 @@ def set_led_colors_buffer_list_multi_call(pixels, rgb_values=[255, 255, 255]):
         if not type(pixels) is list:
             raise TypeError(__string_type_error_1)
         for val in pixels:
-            if (not type(val) is int) or val < 1 or val > __NUMBER_LEDS:
+            if (not type(val) is int):
                 raise TypeError(__string_type_error_1)
+            if val < 1 or val > __NUMBER_LEDS:
+                print(val)
+                print(__NUMBER_LEDS)
+                raise ValueError(__string_value_error_1)
     else:
         if pixels > __NUMBER_LEDS or pixels < 1:
-            raise RuntimeError(__string_runtime_error_1)
+            raise ValueError(__string_value_error_1)
     if not type(rgb_values) is list:
         raise TypeError(__string_type_error_2)
     if type(rgb_values[0]) is list:
@@ -228,14 +236,18 @@ def set_led_colors_buffer_list_multi_call(pixels, rgb_values=[255, 255, 255]):
             if not len(rgb_value) == 3:
                 raise TypeError(__string_type_error_2)
             for i in rgb_value:
-                if (not type(i) is int) or i < 0 or i > 255:
+                if (not type(i) is int):
                     raise TypeError(__string_type_error_2)
+                if i < 0 or i > 255:
+                    raise ValueError(__string_value_error_2)
     else:
         if not len(rgb_values) == 3:
             raise TypeError(__string_type_error_2)
         for i in rgb_values:
-            if (not type(i) is int) or i < 0 or i > 255:
+            if (not type(i) is int):
                 raise TypeError(__string_type_error_2)
+            if i < 0 or i > 255:
+                raise ValueError(__string_value_error_2)
 
     # write into __rgb_leds
     if type(pixels) is int:
@@ -253,9 +265,9 @@ def set_led_colors_buffer_list_multi_call(pixels, rgb_values=[255, 255, 255]):
     if len(__rgb_leds) != __NUMBER_LEDS*3:
         raise RuntimeError(__string_runtime_error_2)
     if len(pixels) > len(rgb_values):
-        __logging.warn(__string_warning_1)
+        __logging.warning(__string_warning_1)
     if len(pixels) < len(rgb_values):
-        __logging.warn(__string_warning_2)
+        __logging.warning(__string_warning_2)
 
 
 def set_max_speed_hz(hz):
@@ -270,24 +282,16 @@ def set_max_speed_hz(hz):
         # it must be driven with a clock higher than 1000hz otherwise it will
         # reset all the time :-)
         raise RuntimeError(__string_runtime_error_3)
-    try:
-        __spi.max_speed_hz = hz
-        global __MAX_SPEED_HZ
-        __MAX_SPEED_HZ = hz
-    except:
-        import traceback
-        traceback.print_exc()
-        raise
+    global __MAX_SPEED_HZ
+    __MAX_SPEED_HZ = hz
 
 
 def set_gamma(gamma=2.1):
     """Set the gamma correction."""
     for i in range(256):
-        __gamma[i] = int(((i/255.0)**gamma) * 255)
+        __gamma[i] = int(((i/255.0)**gamma) * 255.0)
 
 
 # initialize the module with 128 leds
 set_gamma()
 set_number_of_leds()
-# set gamma to a reasonable value
-set_gamma()
