@@ -23,7 +23,7 @@ from timeit import default_timer as __timer
 import traceback
 
 
-__logging.warning("""WS2801python_rpi  Copyright (C) 2017  Markus Kupke
+__logging.warning("""WS2801_RPI v1.0.0 Copyright (C) 2017  Markus Kupke
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it.""")
 
