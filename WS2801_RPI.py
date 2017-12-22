@@ -23,7 +23,7 @@ from timeit import default_timer as __timer
 import traceback
 
 
-__logging.warn("""WS2801python_rpi  Copyright (C) 2017  Markus Kupke
+__logging.warning("""WS2801python_rpi  Copyright (C) 2017  Markus Kupke
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it.""")
 
@@ -221,8 +221,6 @@ def set_led_colors_buffer_list_multi_call(pixels, rgb_values=[255, 255, 255]):
             if (not type(val) is int):
                 raise TypeError(__string_type_error_1)
             if val < 1 or val > __NUMBER_LEDS:
-                print(val)
-                print(__NUMBER_LEDS)
                 raise ValueError(__string_value_error_1)
     else:
         if pixels > __NUMBER_LEDS or pixels < 1:

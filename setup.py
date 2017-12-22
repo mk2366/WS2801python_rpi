@@ -23,7 +23,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.0.dev4',
+    version='1.0.0',
 
     description='Conecting WS2801 LED strip to Raspberry Pi',
     long_description=long_description,
@@ -44,7 +44,7 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
 
         # Indicate who your project is intended for
         'Intended Audience :: Developers',
@@ -60,15 +60,21 @@ setup(
     ],
 
     # What does your project relate to?
-    keywords='RaspberryPi WS2801',
+    keywords='RaspberryPi WS2801 DIY',
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
     packages=find_packages(),
 
+    # MK: included according to http://nose2.readthedocs.io/en/latest/usage.html
+    # test_suite='nose2.collector.collector',
+    # MK: according to http://python-packaging.readthedocs.io/en/latest/testing.html more compatible than nose2
+    test_suite='nose.collector',
+    tests_require=['nose'],
+
     # Alternatively, if you want to distribute just a my_module.py, uncomment
     # this:
-    py_modules=["WS2801_RPI"],
+    # py_modules=["WS2801_RPI"],
 
     # List run-time dependencies here.  These will be installed by pip when
     # your project is installed. For an analysis of "install_requires" vs pip's
@@ -83,7 +89,7 @@ setup(
     # extras_require={
     #    'dev': ['check-manifest'],
     #    'test': ['coverage'],
-    #},
+    # },
 
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these

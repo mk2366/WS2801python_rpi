@@ -1,7 +1,7 @@
 # WS2801python_rpi
 ## A python module connecting RPI with WS2801
 
-__This is version 1.0.0.dev4. It is in development. Code may change without notice.__
+__This is version 1.0.0 (Interface will stay stable now)
 
 It is based on the spidev module you can find [here](https://github.com/doceme/py-spidev).
 
@@ -10,7 +10,9 @@ You can use it like this:
 ```python
 import WS2801_RPI as w
 s=w.set_led_colors_buffer_list_multi_call
+
 w.set_number_of_leds(100)                      # adjust to the number of leds in your project
+w.hello()
 w.s(1)                                         # to let led number 1 shine in white
 w.flush()                                      # to communicate your settings to the led strip via spi
 ```

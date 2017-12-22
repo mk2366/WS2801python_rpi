@@ -11,6 +11,7 @@ class DataSetGetTestCase(unittest.TestCase):
 
     def test_set_led_colors_buffer_list_multi_call(self, mock_spi):
         """Test set_led_colors_buffer_list_multi_call."""
+        WS2801_RPI.set_number_of_leds()
         WS2801_RPI.set_led_colors_buffer_list_multi_call(1)
         WS2801_RPI.flush()
         WS2801_RPI.set_gamma(1)
