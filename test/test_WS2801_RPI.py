@@ -9,6 +9,15 @@ import WS2801_RPI
 class DataSetGetTestCase(unittest.TestCase):
     """Test the set/get methods in module WS2801_RPI."""
 
+    def test_set_max_speed_hz(self, mock_spi):
+        WS2801_RPI.set_number_of_leds(5)
+        with self.assertRaises(ValueError):
+            WS2801_RPI.set_max_speed_hz(1000)
+        WS2801_RPI.set_number_of_leds(5)
+        WS2801_RPI.set_max_speed_hz(2000000)
+        WS2801_RPI.flush()
+        self.assertEqual(mock_spi.max_speed_hz, 2000000)
+
     def test_set_led_colors_buffer_list_multi_call(self, mock_spi):
         """Test set_led_colors_buffer_list_multi_call."""
         WS2801_RPI.set_number_of_leds()
@@ -69,7 +78,8 @@ class DataSetGetTestCase(unittest.TestCase):
                                                              [255, 255, -3]
                                                              )
 
-    def test_set_get_led_colors_buffer_dict(self, mock_spi):
+    @patch("WS2801_RPI.__logging")
+    def test_set_get_led_colors_buffer_dict(self, mock_logger, mock_spi):
         WS2801_RPI.set_gamma(1)
         WS2801_RPI.set_number_of_leds(1)
         d = WS2801_RPI.get_led_colors_buffer_dict()
@@ -97,6 +107,10 @@ class DataSetGetTestCase(unittest.TestCase):
         d[2] = {"blue": 256}
         with self.assertRaises(ValueError):
             WS2801_RPI.set_led_colors_buffer_dict_multi_call(d)
+        del(d[2])
+        d[4.0] = {"float": 3.14}
+        WS2801_RPI.set_led_colors_buffer_dict_multi_call(d)
+        self.assertTrue(mock_logger.warning.called)
 
     def test_set_spidev_bus_device(self, mock_spi):
         with self.assertRaises(TypeError):

@@ -53,6 +53,8 @@ for WS2801"
 __string_runtime_error_4 = "Mode must be between 0 and 3."
 __string_warning_1 = "more leds addressed than rgb \
 values given: assume last rgb for remaining leds"
+__string_warning_3 = "Your dict contains floats as keys. \
+These are not taken into account when adressing LEDs."
 __string_warning_2 = "too many rgb values supplied: \
 skipping"
 
@@ -97,6 +99,7 @@ def set_number_of_leds(leds=128):
 
 
 def get_number_of_leds():
+    """Retrieve the number of LEDs set in the module."""
     return __NUMBER_LEDS
 
 
@@ -169,6 +172,8 @@ def set_led_colors_buffer_dict_multi_call(leds_dict):
         raise TypeError(__string_type_error_3)
     for led, rgb_dict in leds_dict.items():
         rgb_list = [0, 0, 0]
+        if type(led) is float:
+            __logging.warning(__string_warning_3)
         if type(led) is int:
             if led < 1 or led > __NUMBER_LEDS:
                 raise ValueError(__string_value_error_1)
@@ -279,7 +284,7 @@ def set_max_speed_hz(hz):
         # 500 micro sec clock low is the time WS2801 needs to reset. hence
         # it must be driven with a clock higher than 1000hz otherwise it will
         # reset all the time :-)
-        raise RuntimeError(__string_runtime_error_3)
+        raise ValueError(__string_runtime_error_3)
     global __MAX_SPEED_HZ
     __MAX_SPEED_HZ = hz
 
