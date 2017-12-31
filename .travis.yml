@@ -7,8 +7,8 @@ python:
 before_install:
   - sudo apt-get install pandoc
 install:
+  - pandoc --from=markdown --to=rst --output=README.rst README.md
   - python setup.py install
 # command to run tests
 script:
-  - pandoc --from=markdown --to=rst --output=README.rst README.md
   - pytest # or py.test for Python versions 3.5 and below
