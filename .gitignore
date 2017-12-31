@@ -1,4 +1,6 @@
 **.pyc
 **.coverage
+**.eggs
+**WS2801_RPI.egg-info
 build/
 dist/
