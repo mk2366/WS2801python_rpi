@@ -1,13 +1,19 @@
 language: python
 python:
-  - "2.7"
-  - "3.6"
-# command to install dependencies
+- '2.7'
+- '3.6'
 before_install:
-  - sudo apt-get install pandoc
+- sudo apt-get install pandoc
 install:
-  - pandoc --from=markdown --to=rst --output=README.rst README.md
-  - pip install mock
-# command to run tests
+- pandoc --from=markdown --to=rst --output=README.rst README.md
+- pip install mock
 script:
-  - python setup.py install test
+- python setup.py install test
+deploy:
+  skip_cleanup: true  
+  provider: pypi
+  user: mk2366
+  password:
+    secure: X+Vw1gjhERB2GIGc6AO4yCVSccnoMOgRF/8Kk5hXvlPc8hL08nb5sbOSmTxKqnZUAuoMelcit0HqBU0KaepEeP8BkjYei7FP1M80VNv3o11CzjcF4PuDvgjvczZHyupHQJcC6WIWF8aP2kXdn8rMKh75taIW+24k+8hcU4opugq70PPNxHIIBTIztHkatRGDlYoFCGE9v4QNUGLyvw+fPRxpziP4DOUU74lNLU5tASj/B7KkCBdk+tyBv6Hr1ZTCsHjK9ztV+EIKlfmOF540RPpSH13PmuTIS5a+TJCN7AhEJ1cw/xbuO2Nkf2B71GIVIYeOn2XBYZ0p4WqlBcFcKkoMTJwR4PnDGmzXCqC0Naaklh6zPAXLylGefvkCvDYgr8DV0hlieq9PTsGLni6sJjRM6ZK9Aqh315KepH4EhvdM5S+qnIngKSirhksMpxqZT/sTxiAqJl6DwwDmCK6yLpFIauh7r+wnmkcObtoWNNd5L/0iEOvkgDgDGSv1muxRnHEQSx2LBpmvuom9Dn0V1NL/jIGqymRTtdyD4Wb+aYUYZy36uVujIv4VIJfqCUg7Yjvt/HZ0qyKJmEQL2hLFBHelgPqXhaE1D8S9L6G5uqwMcrLtPAsose4fH2t9yTskMeWkNugaH99NMW1lNlqksr9v0X69dOSAWeerq+yyXsw=
+  on:
+    tags: true
