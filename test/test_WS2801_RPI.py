@@ -1,8 +1,12 @@
 """Test module for Unit Tests of WS2801_RPI."""
 
 import unittest
-from unittest.mock import patch
+import sys
 import WS2801_RPI
+if sys.version_info >= (3,):
+    from unittest.mock import patch
+else:
+    from mock import patch
 
 
 @patch("WS2801_RPI.__spi")
@@ -10,6 +14,7 @@ class DataSetGetTestCase(unittest.TestCase):
     """Test the set/get methods in module WS2801_RPI."""
 
     def test_set_max_speed_hz(self, mock_spi):
+        """Check whether one can set the speed"""
         WS2801_RPI.set_number_of_leds(5)
         with self.assertRaises(ValueError):
             WS2801_RPI.set_max_speed_hz(1000)
