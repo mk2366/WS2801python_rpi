@@ -59,7 +59,7 @@ You can call `python setup.py test` to run the tests (if you clone the git repo 
 ## General remarks on WS2801:
 * In the Data [Sheet](https://cdn-shop.adafruit.com/datasheets/WS2801.pdf) of WS2801 I found the following passage I didn't fully understand: `When the WS2801 receives total 24
 clock rising edges, the WS2801 enters relay mode ...`. In addition one can read [this](https://electronics.stackexchange.com/a/307117) explanation. I found it helpful.
-* WS2801 is using the raising flag of the clock to retrieve the data and expects clock being low for 500 microseconds between data transmissions. Hence there is no need to chance
-the mode of spidev. It must be zero, regardless which effects you see.
+* WS2801 is using the raising flag of the clock to retrieve the data and expects clock being low for 500 microseconds between data transmissions. Hence there is no need to change
+the mode of spidev.
 
 ## Would be glad if this code was used often in your projects. Feedback and pull requests are more than welcome.
