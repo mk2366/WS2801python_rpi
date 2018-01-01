@@ -7,10 +7,15 @@ before_install:
 install:
 - pandoc --from=markdown --to=rst --output=README.rst README.md
 - pip install mock
+- pip install coverage
+- pip install codecov
 script:
 - python setup.py install test
+- coverage run ./test/test_WS2801_RPI.py
+after_success:
+- codecov
 deploy:
-  skip_cleanup: true  
+  skip_cleanup: true
   provider: pypi
   user: mk2366
   password:
