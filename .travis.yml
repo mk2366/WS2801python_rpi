@@ -1,6 +1,5 @@
 language: python
 python:
-  - "2.6"
   - "2.7"
   - "3.6"
 # command to install dependencies
@@ -8,7 +7,7 @@ before_install:
   - sudo apt-get install pandoc
 install:
   - pandoc --from=markdown --to=rst --output=README.rst README.md
-  - python setup.py install
+  - pip install mock
 # command to run tests
 script:
-  - pytest # or py.test for Python versions 3.5 and below
+  - python setup.py install test
