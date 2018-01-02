@@ -1,4 +1,10 @@
 [![Build Status](https://travis-ci.org/mk2366/WS2801python_rpi.svg?branch=master)](https://travis-ci.org/mk2366/WS2801python_rpi)
+[![Version](https://img.shields.io/pypi/v/WS2801-RPI.svg?style=flat-square)](https://pypi.python.org/pypi/WS2801-RPI)
+[![Implementation](https://img.shields.io/pypi/implementation/WS2801-RPI.svg?style=flat-square)](https://pypi.python.org/pypi/WS2801-RPI)
+[![Status](https://img.shields.io/pypi/status/WS2801-RPI.svg?style=flat-square)](https://pypi.python.org/pypi/WS2801-RPI)
+[![Pyversions](https://img.shields.io/pypi/pyversions/WS2801-RPI.svg?style=flat-square)](https://pypi.python.org/pypi/WS2801-RPI)
+[![Format](https://img.shields.io/pypi/format/WS2801-RPI.svg?style=flat-square)](https://pypi.python.org/pypi/WS2801-RPI)
+[![License](https://img.shields.io/pypi/l/WS2801-RPI.svg?style=flat-square)](https://pypi.python.org/pypi/WS2801-RPI)
 
 # WS2801python_rpi
 ## A python module connecting RPI with WS2801
