@@ -6,6 +6,8 @@
 [![Pyversions](https://img.shields.io/pypi/pyversions/WS2801-RPI.svg?style=flat-square)](https://pypi.python.org/pypi/WS2801-RPI)
 [![Format](https://img.shields.io/pypi/format/WS2801-RPI.svg?style=flat-square)](https://pypi.python.org/pypi/WS2801-RPI)
 [![License](https://img.shields.io/pypi/l/WS2801-RPI.svg?style=flat-square)](https://pypi.python.org/pypi/WS2801-RPI)
+[![Issues](http://img.shields.io/github/issues/mk2366/WS2801python_rpi.svg)]( https://github.com/mk2366/WS2801python_rpi/issues )
+
 
 # WS2801python_rpi
 ## A python module connecting RPI with WS2801
