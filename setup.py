@@ -23,7 +23,11 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.0',
+    # version='1.0.0',
+
+    # MK: included as descibed on https://pypi.python.org/pypi/setuptools_scm
+    use_scm_version=True,
+    setup_requires=['setuptools_scm'],
 
     description='Conecting WS2801 LED strip to Raspberry Pi',
     long_description=long_description,
@@ -80,7 +84,7 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['spidev'],
+    install_requires=['spidev', 'pkg_resources'],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,

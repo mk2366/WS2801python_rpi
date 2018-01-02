@@ -11,7 +11,7 @@ install:
 - pip install codecov
 script:
 - python setup.py install test
-- coverage run ./test/test_WS2801_RPI.py
+- coverage run --source WS2801_RPI ./test/test_WS2801_RPI.py
 after_success:
 - codecov
 deploy:

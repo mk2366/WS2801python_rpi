@@ -1,8 +1,15 @@
-"""
+from pkg_resources import get_distribution, DistributionNotFound
+try:
+    __version__ = get_distribution(__name__).version
+except DistributionNotFound:
+   # package is not installed
+   pass
+
+__doc__ = """
 WS2801python_rpi: A python program to connect WS2801 driven LED strips.
 
 Copyright (C) 2017  Markus Kupke <kupkemarkus@gmail.com>
-Version: '1.0.0.dev3'
+Version: /version/
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -15,7 +22,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 See <http://www.gnu.org/licenses/>.
-"""
+""".replace("/version/", __version__)
 import spidev as __spidev
 import logging as __logging
 import time
@@ -23,9 +30,7 @@ from timeit import default_timer as __timer
 import traceback
 
 
-__logging.warning("""WS2801_RPI v1.0.0 Copyright (C) 2017  Markus Kupke
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it.""")
+__logging.warning(__doc__)
 
 __BUS = 0
 __DEVICE = 0
