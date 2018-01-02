@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/mk2366/WS2801python_rpi.svg?branch=master)](https://travis-ci.org/mk2366/WS2801python_rpi)
+[![codecov](https://codecov.io/gh/mk2366/WS2801python_rpi/branch/master/graph/badge.svg)](https://codecov.io/gh/mk2366/WS2801python_rpi)
 [![Version](https://img.shields.io/pypi/v/WS2801-RPI.svg?style=flat-square)](https://pypi.python.org/pypi/WS2801-RPI)
 [![Implementation](https://img.shields.io/pypi/implementation/WS2801-RPI.svg?style=flat-square)](https://pypi.python.org/pypi/WS2801-RPI)
 [![Status](https://img.shields.io/pypi/status/WS2801-RPI.svg?style=flat-square)](https://pypi.python.org/pypi/WS2801-RPI)
