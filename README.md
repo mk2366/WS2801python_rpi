@@ -1,7 +1,7 @@
+[![Build Status](https://travis-ci.org/mk2366/WS2801python_rpi.svg?branch=master)](https://travis-ci.org/mk2366/WS2801python_rpi)
+
 # WS2801python_rpi
 ## A python module connecting RPI with WS2801
-
-__This is version 1.0.0 (Interface will stay stable now)
 
 It is based on the spidev module you can find [here](https://github.com/doceme/py-spidev).
 
