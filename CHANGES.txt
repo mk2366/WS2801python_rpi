@@ -1,2 +1,3 @@
-v1.0.0, 22.12.2017  -- initial release
-v1.0.1, 2.1.2018    -- Version now attached to git tags
+1.0.0, 22.12.2017  -- initial release
+1.0.1, 2.1.2018    -- Version now attached to git tags
+1.0.2, 2.1.2018    -- Samples
